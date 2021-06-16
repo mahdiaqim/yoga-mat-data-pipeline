@@ -1,6 +1,8 @@
 #%%
 from numpy import numarray
 from selenium import webdriver
+from datetime import date
+from time import sleep
 driver = webdriver.Chrome()
 import urllib.request
 #to make it go faster
@@ -28,6 +30,7 @@ class Mat_Yoga:
 def get_all_links_to_each_mat():
         #N_items = 28    
     driver.get('https://www.lululemon.co.uk/en-gb/c/accessories?prefn1=styleNumber&prefv1=Yoga+Mats&sz=34')
+    sleep(10)
     all_links = []
     for i in range(2,33):
         try:
@@ -107,6 +110,7 @@ def get_colours():
     
 def fetch_all_data_for_one_mat(mat_url):
         driver.get(mat_url)
+        sleep(5)
         mat_yoga = Mat_Yoga(
             material = get_materials(),
             price = get_price(),
@@ -132,15 +136,18 @@ for url in list_of_all_links:
 #%%
 print(all_mats)
 #print(all_mats)
-# Next (print progress)
-#printed format nicer 
-# see how long it takes
+
   
 #%%
 import pandas as pd
 import csv
+df = pd.DataFrame(list_of_all_links)
+today = str(date.today())
+df.to_csv(today+'_all_links_lululemon.csv')
+
 df = pd.DataFrame(all_mats)
-df.to_csv('all_mats_lululemon_10_06_21.csv')
+today = str(date.today())
+df.to_csv(today+'_all_mats_lululemon.csv')
 #%%
 print (all_mats)
 
@@ -163,7 +170,8 @@ for i in all_mats:
 # test = json.dumps(json_file, indent = 4) 
 # from pprint import pprint
 # pprint(test)
-with open('all_mats_lululemon_10_06_21.json', 'w') as f:
+today = str(date.today())
+with open(today + '_all_mats_lululemon_10_06_21.json', 'w') as f:
       json.dump(json_file,f, indent=4)
 
 
@@ -265,35 +273,8 @@ for i in list_of_all_links[2:5]:
         print('meassage',e)
         continue
 
-# /html/body/div[1]/div[3]/div[3]/div[3]/div[3]/div/div[1]/label/div/a[2]
-# /html/body/div[1]/div[3]/div[3]/div[3]/div[3]/div/div[1]/label/div/a[3]
+
 #%%
-
-# class ='col-6 col-md-4' class on the main page of 26 different types of product
-# Xpath for eah one of the products on base:    
-            #' //*[@id="product-search-results"]/div[2]/div[2]/div[4]/div[2]/div/div'
-            # '//*[@id="product-search-results"]/div[2]/div[2]/div[4]/div[3]/div/div'
-            # '//*[@id="product-search-results"]/div[2]/div[2]/div[4]/div[4]/div/div'
-            # //*[@id="product-search-results"]/div[2]/div[2]/div[4]/div[29]
-            # '//*[@id="product-search-results"]/div[2]/div[2]/div[4]/div[2]'
-# Xpath for price of price on base URL
-        #/'/*[@id="product-search-results"]/div[2]/div[2]/div[4]/div[2]/div/div/div[2]/div[3]/div/span'
-# Xpath for name and href on base URL:
-            #'//*[@id="product-search-results"]/div[2]/div[2]/div[4]/div[3]/div/div/div[2]/div[2]/a'
-            #'//*[@id="product-search-results"]/div[2]/div[2]/div[4]/div[5]/div/div/div[2]/div[2]/a'
-
-# Price once I am on the website of a specific Mat:
-        #'/html/body/div[1]/div[3]/div[3]/div[3]/div[3]/div/div[1]/label/span/span[1]'
-        #'/html/body/div[1]/div[3]/div[3]/div[3]/div[3]/div/div[1]/label/span/span[1]'
-        #'/html/body/div[1]/div[3]/div[3]/div[3]/div[3]/div/div[1]/label/span/span[1]'
-
-# %%
-#All links saved in all_links_lululemon
-# import pandas as pd
-# import csv
-# print (len(all_links))
-# df = pd.DataFrame(all_links)
-# df.to_csv('all_links_lululemon.csv')
 
 
 
