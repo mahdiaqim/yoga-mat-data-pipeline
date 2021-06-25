@@ -133,12 +133,11 @@ for url in list_of_all_links:
                 continue
 
 
-#%%
-print(all_mats)
-#print(all_mats)
+
 
   
 #%%
+#To csv
 import pandas as pd
 import csv
 df = pd.DataFrame(list_of_all_links)
@@ -258,7 +257,7 @@ for i in list_of_all_links[3:6]:
         continue
 
 #%%
-#Get Colors
+#Test Get Colors
 driver = webdriver.Chrome()
 # baseURL = 'https://www.lululemon.co.uk/en-gb/c/accessories?prefn1=styleNumber&prefv1=Yoga+Mats&sz=34'     
 # driver.get (baseURL)
