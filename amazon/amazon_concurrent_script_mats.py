@@ -197,15 +197,16 @@ if __name__ == "__main__":
         #read urls for each mat form csv file
     header_urls = ['index', 'url']
     BASE_DIR = Path(__file__).resolve(strict=True).parent
-    urls = pd.read_csv(Path(BASE_DIR).joinpath('Amazon_output_Urls20210623121907.csv'), names=header_urls)
+    #leyendo primears 1100 de Amazon_output_Urls20210623121907.csv spredsheet 25/06/21
+    urls = pd.read_csv(Path(BASE_DIR).joinpath('urls_mats/Amazon_output_Urls20210623121907.csv'), names=header_urls)
 
 
     # crawl
     with ThreadPoolExecutor() as executor:
-        for number in range (0,2):
+        for number in range (100,1100):
             futures.append(
-                #executor.submit(run_process_features_each_mat, urls['url'][number], output_filename_csv, output_filename_json)
-                executor.submit(run_process_features_each_mat, testo[number], output_filename_csv, output_filename_json)
+                executor.submit(run_process_features_each_mat, urls['url'][number], output_filename_csv, output_filename_json)
+                #executor.submit(run_process_features_each_mat, testo[number], output_filename_csv, output_filename_json)
             )
 
     wait(futures)
