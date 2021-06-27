@@ -9,7 +9,7 @@ from pathlib import Path
 import tempfile
 import pprint
 
-#libraries to upload
+#libraries to upload to aws
 from botocore.exceptions import ClientError
 import logging
 import boto3
@@ -229,7 +229,7 @@ end_time = time()
 elapsed_time = end_time - start_time
 print(f"Elapsed run time: {elapsed_time} seconds")
 
- 
+#%% 
 #obtaining directory name to dump csvs and jsons there 
 BASE_DIR = Path(__file__).resolve(strict=True).parent
 output_timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
@@ -240,7 +240,6 @@ import csv
 df = pd.DataFrame(links)
 df.to_csv(f'all_urls_lululemon{output_timestamp}.csv')
 df = pd.DataFrame(all_mats)
-today = str(date.today())
 df.to_csv(f'all_mats_lululemon{output_timestamp}.csv')
 
 #To json
@@ -281,14 +280,16 @@ password = 'postgres'
 db_string = f"postgresql://{user}:{password}@{host}:{port}/{dbname}" 
 db = create_engine(db_string) 
 # open json file
-with open('2021-06-25_all_mats_lululemon.json') as f:
+with open('data_lululemon\ll_mats_lululemon20210627212945.json') as f:
     df = pd.read_json(f, orient='records')
 
 # insert data to db
-df.to_sql('test', db)
+df.to_sql(f'mats_lululemon20210627', db)
 
 
 
 
 
     
+
+ %%
