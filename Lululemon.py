@@ -239,7 +239,7 @@ for i in list_of_all_links[2:5]:
 #Test for images, store them and then save them with unique Id
 driver = webdriver.Chrome()
 m = 0
-for i in list_of_all_links[3:6]:
+for i in list_of_all_links[3:6
     m+=1
     try:
        driver.get(i)
