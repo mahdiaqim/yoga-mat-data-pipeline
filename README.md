@@ -10,7 +10,5 @@
 ### Libraries to upload to database created in RDS : psycopg, sqlachemy , pandas and json
 ### Libraries for multuthreading : ThreadPoolExecutor and wait from concurrent.futures  
 ## Results:
-### In the case of amazon the scraper file contains all functions that are used in the script files. Amazon contains multithreading and it appends continuosly any data scraped 
-### to a csv and a json file simultaneously. It collected data for 1000 yoga mats in 5221 seconds.
-### In the case of Lululemon multithreading there is only one file that contains all functions, it  uploads continuosly the images to a bucket in s3. At the end it saves all 
-### data scraped to a csv file, to a json file and a database in Amazon RDS  
+### In the case of amazon the scraper file contains all functions that are used in the script files. Amazon contains multithreading and it appends continuosly any data scraped to a csv and a json file simultaneously. It collected data for 1000 yoga mats in 5221 seconds.
+### In the case of Lululemon multithreading there is only one file that contains all functions, it  uploads continuosly the images to a bucket in s3. At the end it saves all scraped data to a csv file, to a json file and a database in Amazon RDS  
