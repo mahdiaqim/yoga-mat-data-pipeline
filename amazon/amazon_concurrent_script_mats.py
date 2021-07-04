@@ -8,6 +8,7 @@ from concurrent.futures import ThreadPoolExecutor, wait
 from pathlib import Path
 
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 
 from scraper_amazon import get_driver_headless, get_driver, write_to_file_Link ,write_to_csv_mat, write_to_json_mat, connect_to_base_mat# put_all_features_together_in_list
 from scraper_amazon import Mat_Yoga , upload_file  , upload_images
@@ -130,17 +131,6 @@ def run_process_features_each_mat(mat_url, filename_csv, filename_json):
         print("Error connecting to mat url")
         browser.quit()
 
-#%%
-
-
-# M ='https://www.amazon.com/Friendly-Fitness-Exercise-Carrying-Exercises/dp/B08R55YR6J/ref=sr_1_217_sspa?dchild=1&keywords=yoga+mats&qid=1624447198&s=sports-and-fitness&sr=1-217-spons&psc=1&spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUEyTE9RNTJUTDlaTERQJmVuY3J5cHRlZElkPUEwMzczODk3Mk8yNFYyT09CQTYyNCZlbmNyeXB0ZWRBZElkPUEwNzA2Njc1RDlZWTNLMzVCQjBJJndpZGdldE5hbWU9c3BfYXRmX25leHQmYWN0aW9uPWNsaWNrUmVkaXJlY3QmZG9Ob3RMb2dDbGljaz10cnVl'
-# G ='https://www.google.com/'
-# C ='https://www.amazon.com/Unbeatable-Thickness-Alignment-Carrying-Exercise/dp/B08FZNTJSZ/ref=sr_1_5113_sspa?dchild=1&keywords=yoga+mats&qid=1624456322&s=sports-and-fitness&sr=1-5113-spons&psc=1&spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUFGSU8wUUxaWEdCUEgmZW5jcnlwdGVkSWQ9QTA1NjY5NjUyR1RZNUdGU0FFQktMJmVuY3J5cHRlZEFkSWQ9QTAxNjY4OTMxR0tSVlhRTEFYTzZLJndpZGdldE5hbWU9c3BfYXRmX25leHQmYWN0aW9uPWNsaWNrUmVkaXJlY3QmZG9Ob3RMb2dDbGljaz10cnVl'
-# A ='https://www.amazon.com/Yoga-Direct-Deluxe-Sticky-4-Inch/dp/B007MTZFUW/ref=sr_1_222?dchild=1&keywords=yoga+mats&qid=1624447198&s=sports-and-fitness&sr=1-222'
-# B ='https://www.amazon.com/YuniMuse-Anti-Tear-Cushioning-Extra-Thick-Pink-purple/dp/B08GG7WRX9/ref=sr_1_221?dchild=1&keywords=yoga+mats&qid=1624447198&s=sports-and-fitness&sr=1-221'
-# testo =[A,B]
-# browser = get_driver_headless()
-# browser.get(A)
 
 
 
