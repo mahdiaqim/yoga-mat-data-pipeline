@@ -10,10 +10,9 @@ def run_process(page_number, filename, browser):
     if connect_to_base(browser, page_number):
         sleep(2)
         all_links = get_all_links_to_each_mat_in_each_page(browser, current_page)
-        # output_list = parse_html(html)
         write_to_file(all_links, filename)
     else:
-        print("Error connecting to hacker news")
+        print("Error connecting ")
 start_time = time()
 current_page = 1
 output_timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")

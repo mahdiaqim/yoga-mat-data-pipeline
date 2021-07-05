@@ -101,9 +101,10 @@ def write_to_file_Link(output_list, filename):
 
 def write_to_csv_mat(filename_csv, keys, values):
     name =Path(BASE_DIR).joinpath(filename_csv)
-    #desordenado con solo las siguientes dos lineas
     df = pd.DataFrame(values, index=keys).T
     df.to_csv(name, mode='a', header=False)
+    
+    
     #vertical con las siguientes lineas
     # df = pd.DataFrame(values)
     # df.to_csv(Path(BASE_DIR).joinpath(filename_csv), mode='a', index=keys)

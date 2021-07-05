@@ -4,7 +4,7 @@ import sys
 from time import sleep, time
 from concurrent.futures import ThreadPoolExecutor, wait
 
-from scraper_amazon_urls import get_driver_headless, write_to_file_Link, connect_to_base
+from scraper_amazon import get_driver_headless, write_to_file_Link, connect_to_base
 
 
 def run_process_pages(page_number, filename):
@@ -19,12 +19,12 @@ def run_process_pages(page_number, filename):
             print('len_all_links, Page_number', len(all_links), page_number)
         except Exception as e:
             print('Error getting URLs', i, '\n', e)
-    
+        # saving all urls to each product
         write_to_file_Link(all_links, filename)
         print('writing to csv page number', page_number)
         browser.quit()
     else:
-        print("Error connecting to hacker news")
+        print("Error connecting to page", page_number)
         browser.quit()
 
 if __name__ == "__main__":

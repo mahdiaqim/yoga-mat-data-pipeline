@@ -73,5 +73,14 @@ df['saleprice'].unique()
 
 # %%
 df.head(300)
+#other prices and table features
+
+# %%
+
+# %%
+
+# %%
+
+# %%
 
 # %%

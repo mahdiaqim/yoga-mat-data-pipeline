@@ -2,7 +2,7 @@ import datetime
 import sys
 from time import sleep, time
 
-from scraper_amazon_urls import get_all_links_to_each_mat_in_each_page, get_driver, write_to_file, connect_to_base
+from scraper_amazon import get_all_links_to_each_mat_in_each_page, get_driver, write_to_file, connect_to_base
 
 # main block
 # set variables
@@ -10,7 +10,6 @@ def run_process(page_number, filename, browser):
     if connect_to_base(browser, page_number):
         sleep(2)
         all_links = get_all_links_to_each_mat_in_each_page(browser, current_page)
-        # output_list = parse_html(html)
         write_to_file(all_links, filename)
     else:
         print("Error connecting to hacker news")
