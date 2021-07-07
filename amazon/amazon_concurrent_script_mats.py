@@ -10,7 +10,7 @@ from pathlib import Path
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 
-from scraper_amazon import get_driver_headless, get_driver, write_to_file_Link ,write_to_csv_mat, write_to_json_mat, connect_to_base_mat# put_all_features_together_in_list
+from scraper_amazon import get_driver_headless, get_driver, write_to_file_Link ,write_to_csv_mat, write_to_json_mat, connect_to_base_mat
 from scraper_amazon import Mat_Yoga , upload_file  , upload_images
 
 #%%
@@ -30,16 +30,16 @@ def put_all_features_together_in_list(mat_url,other_features_one_mat,reviews_tex
     return(all_features_keys, all_features_values)
 
 def run_process_features_each_mat(mat_url, filename_csv, filename_json):
-   # mat_yoga = Mat_Yoga()
+ 
     browser = get_driver_headless()
     if connect_to_base_mat(browser, mat_url):
         sleep(10) 
         ## : Provider
         # 0: name
         #1,2,3 price
-        # table Features contains: color, brand, Material,Product care, Dimentions
+        # 
 
-        #table
+        #table Features contains: color, brand, Material,Product care, Dimentions
         try:
             table_features = []
             table = browser.find_elements_by_xpath('//*[@id="productOverview_feature_div"]/div/table/tbody')
@@ -53,7 +53,8 @@ def run_process_features_each_mat(mat_url, filename_csv, filename_json):
         
         print('table_feature', table_features_dict.keys())
      
-        #prie, name, reviews
+
+        #other_features_one_mat : price, name, number of reviews and rating
         other_features_one_mat = {} 
         keys_other_paths = ['name', 'saleprice', 'ourprice', 'price_buybox','number_reviews','rating']
         other_xpath = ['//*[@id="title"]',
@@ -88,7 +89,7 @@ def run_process_features_each_mat(mat_url, filename_csv, filename_json):
             
         print('reviews_text_dict', reviews_text_dict.keys())
 
-        # other colors
+        # other colors with prices
         other_colors ={}
         text_other_colors = []
         price_colors = []
@@ -187,7 +188,7 @@ if __name__ == "__main__":
         #read urls for each mat form csv file
     header_urls = ['index', 'url']
     BASE_DIR = Path(__file__).resolve(strict=True).parent
-    #leyendo primears 1100 de Amazon_output_Urls20210623121907.csv spredsheet 25/06/21
+    #reading 1100 from Amazon_output_Urls20210623121907.csv spredsheet 25/06/21
     urls = pd.read_csv(Path(BASE_DIR).joinpath('urls_mats/Amazon_output_Urls20210623121907.csv'), names=header_urls)
 
 
