@@ -1,4 +1,4 @@
-# yoga-matt-data-pipeline
+# yoga-mat-data-pipeline
 ## Summary:
 The project has the scripts for webscraping yoga mats from Lululemon and Amazon. it uses multithreading for Amazon. in both cases it has two parts, the first one collects urls for each product and the second collects the targeted features: price, color, reviews, rating , material and images. 
 ## Motivation:
