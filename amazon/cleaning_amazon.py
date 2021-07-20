@@ -51,15 +51,13 @@ for i in columns:
         print(e)
 df = df.replace(r'', np.NaN)
 #%%
-
+df['other_prices']
 #%%
 df.isnull().sum()
 #%%
 df.isna().sum()
 df.info()
-#%%
-df['other_prices'][2]
-df['other_prices_to fill_ourprice'] = df['other_prices'].apply(lambda x: replace_3(x)).astype('float') 
+
 #%%
 #cleaning all prices and putting all in one single column, converting to float
 def replace_1(x):
@@ -78,16 +76,18 @@ def replace_2(x):
         return x.split()[0]
     else:
         return np.nan
+
 def replace_3(x):
-    if x==np.nan:
-        return np.nan
-        
-    else:
-        for k,v in [('$',""),(">","")]:
-           x = x.split()[0] 
-           x = x.replace(k,v)
+   
+    if x:
+        x = str(x)
+        x = x.split('-')[0] 
+        x = x.replace('$',"").replace(">","").replace('"', "")
         return x
-        
+
+    else:
+        return np.nan
+
 #%%        
 #cleaning saleprice
 df['saleprice'] = df['saleprice'].str.replace('$',"").astype('float')
@@ -108,7 +108,7 @@ plt.plot(df['price_buybox'], label='price_buybox')
 #find outliers 
 df[df['ourprice_1']>200]
  # %%
-pd.options.display.max_colwidth
+#pd.options.display.max_colwidth
 #Droping outlier: price over 700
 df.loc[525, 'mat_url']
 df.drop(525,axis=0, inplace=True)
@@ -117,21 +117,25 @@ df.drop(525,axis=0, inplace=True)
 df.loc[951, 'mat_url']
 
 # %%
-plt.plot(df['saleprice'], label=f"saleprice-{df['saleprice'].isna().sum()}")
-plt.plot(df['ourprice_2'], label=f"ourprice_2-{df['ourprice_2'].isna().sum()}")
-plt.plot(df['ourprice_1'], label=f"ourprice_1-{df['ourprice_1'].isna().sum()}")
-plt.plot(df['price_buybox'], label=f"price_buybox-{df['price_buybox'].isna().sum()}")
+plt.plot(df['saleprice'], label=f"saleprice-nulls={df['saleprice'].isna().sum()}")
+plt.plot(df['ourprice_2'], label=f"ourprice_2-nulls={df['ourprice_2'].isna().sum()}")
+plt.plot(df['ourprice_1'], label=f"ourprice_1-nulls={df['ourprice_1'].isna().sum()}")
+plt.plot(df['price_buybox'], label=f"price_buybox-nulls={df['price_buybox'].isna().sum()}")
+plt.plot(df['other_prices_to fill_ourprice'], label=f"other_prices_to fill_ourprice-nulls={df['other_prices_to fill_ourprice'].isna().sum()}")
 plt.legend()
-
+columns_to_drop = ['saleprice','ourprice_2','combined_price','price_buybox','other_prices_to fill_ourprice']
 # %%
-prices = df.fillna(0)['saleprice']+df.fillna(0)['ourprice_2']+df.fillna(0)['ourprice_1']+df.fillna(0)['price_buybox']
-
-
-#%%
+prices =df.fillna(0)['other_prices_to fill_ourprice'] + df.fillna(0)['saleprice'] + df.fillna(0)['ourprice_2'] + df.fillna(0)['ourprice_1'] + df.fillna(0)['price_buybox']
 bool= prices==0
 bool.sum()
-#184 missing values for the price
-df[bool]
+#184 missing values for the price, 161 missing if I use the price from other colors
+#%%
+#Combined price is completed with the ones with less missing values
+df = df.fillna(0)
+df['combined_price'] =df['price_buybox']
+print(df['combined_price'].isna().sum())
+df['combined_price']=np.where(df['combined_price']==0 ,df['other_prices_to fill_ourprice'],df['combined_price'])
+print((df['combined_price']==0).sum())
 #%%
 #other prices and table features
 
