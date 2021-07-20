@@ -45,16 +45,16 @@ df.drop(['other_colors_and_prices'],axis=1, inplace=True)
 # %%
 for i in columns:
     try:
-        df[i] = df[i].apply(lambda y:np.nan  if y=='[]' else y)
+        df[i] = df[i].apply(lambda y:np.nan  if len(y)==0 else y)
         df[i] = df[i].apply(lambda y:np.nan  if y=="['error']" else y)
     except Exception as e:
         print(e)
 df = df.replace(r'', np.NaN)
+
 #%%
 df['other_prices']
 #%%
-df.isnull().sum()
-#%%
+df.isnull().sum()#%%
 df.isna().sum()
 df.info()
 
@@ -123,7 +123,7 @@ plt.plot(df['ourprice_1'], label=f"ourprice_1-nulls={df['ourprice_1'].isna().sum
 plt.plot(df['price_buybox'], label=f"price_buybox-nulls={df['price_buybox'].isna().sum()}")
 plt.plot(df['other_prices_to fill_ourprice'], label=f"other_prices_to fill_ourprice-nulls={df['other_prices_to fill_ourprice'].isna().sum()}")
 plt.legend()
-columns_to_drop = ['saleprice','ourprice_2','combined_price','price_buybox','other_prices_to fill_ourprice']
+
 # %%
 prices =df.fillna(0)['other_prices_to fill_ourprice'] + df.fillna(0)['saleprice'] + df.fillna(0)['ourprice_2'] + df.fillna(0)['ourprice_1'] + df.fillna(0)['price_buybox']
 bool= prices==0
@@ -131,14 +131,25 @@ bool.sum()
 #184 missing values for the price, 161 missing if I use the price from other colors
 #%%
 #Combined price is completed with the ones with less missing values
-df = df.fillna(0)
-df['combined_price'] =df['price_buybox']
-print(df['combined_price'].isna().sum())
+
+df['combined_price'] =df['price_buybox'].fillna(0)
+print((df['combined_price']==0).sum())
 df['combined_price']=np.where(df['combined_price']==0 ,df['other_prices_to fill_ourprice'],df['combined_price'])
 print((df['combined_price']==0).sum())
+df['combined_price']=np.where(df['combined_price']==0 ,df['saleprice'],df['combined_price'])
+print((df['combined_price']==0).sum())
+#%%
+#drop where price is 0
+df = df.drop(df[df.combined_price.isnull()].index)
+df.shape
+#%%
+#drop columns with other prices
+columns_to_drop = ['saleprice','ourprice_2','ourprice_1','price_buybox','other_prices_to fill_ourprice']
+df.drop(columns_to_drop,axis=1, inplace=True)
+df.shape
 #%%
 #other prices and table features
-
+df['table_features_color_care_material']
 # %%
 
 # %%
