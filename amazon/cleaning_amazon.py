@@ -45,15 +45,11 @@ df.drop(['other_colors_and_prices'],axis=1, inplace=True)
 # %%
 for i in columns:
     try:
-        df[i] = df[i].apply(lambda y:np.nan  if y=='[]' else y)
+        df[i] = df[i].apply(lambda y:np.nan  if len(y)== 0 else y)
         df[i] = df[i].apply(lambda y:np.nan  if y=="['error']" else y)
     except Exception as e:
         print(e)
 df = df.replace(r'', np.NaN)
-#%%
-df['other_prices']
-#%%
-df.isnull().sum()
 #%%
 df.isna().sum()
 df.info()
@@ -139,8 +135,7 @@ print(df['combined_price'].isna().sum())
 df['combined_price']=np.where(df['combined_price']==0 ,df['other_prices_to fill_ourprice'],df['combined_price'])
 print((df['combined_price']==0).sum())
 #%%
-df = df.drop(df[df.combined_price==0].index)
-df.shape
+
 #%%
 #drop columns with other prices
 columns_to_drop = ['saleprice','ourprice_2','ourprice_1','price_buybox','other_prices_to fill_ourprice']
@@ -149,12 +144,7 @@ df.shape
 #%%
 #other prices and table features
 df['table_features_color_care_material']
-
-#%%
-#other prices and table features
-df['table_features_color_care_material']
 df['table_features_color_care_material'] = df['table_features_color_care_material'].apply(lambda y:np.nan  if type(y)==list and len(y)==0 else y)
-# %%
 all_features = ['Weight', 'Item Dimensions LxWxH','Care Instructions','Item Thickness','Material','Brand']
 def split_feature(x, feature):
     if type(x)==float or type(x)==int:
@@ -183,56 +173,28 @@ def after_split(x, feature):
         return x.split(feature)[0]
     else:
         return x
-#Color Cherry Pink & Navy BlueBrand BEAUTYOVOMaterial Thermoplastic ElastomersProduct Care Instructions 
-#Hand Wash OnlyItem Dimensions LxWxH 72 x 24 x 0.31 inchesItem Weight 2 Pounds
 df['weight']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Weight')).apply(lambda x: split_rest_features(x, all_features))
-#df['table_features_color_care_material']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Weight'))
 
 df['dimentions']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Item Dimensions LxWxH')).apply(lambda x: split_rest_features(x, all_features))
-# df['table_features_color_care_material']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Item Dimensions LxWxH'))
 
 df['care']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Product Care Instructions')).apply(lambda x: split_rest_features(x, all_features))
-#df['table_features_color_care_material']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Product Care Instructions'))
 
 df['thickness']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Item Thickness')).apply(lambda x: split_rest_features(x, all_features))
-#df['table_features_color_care_material']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Item Thickness'))
 
 df['material']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Material')).apply(lambda x: split_rest_features(x, all_features))
-#df['table_features_color_care_material']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Material'))
 
 df['brand']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Brand')).apply(lambda x: split_rest_features(x, all_features))
+
 df['color']=df['table_features_color_care_material'].apply(lambda x: split_rest_features(x, all_features))
 
 
 
 #%%
 df.isna().sum()
-# %%
-#color: Fabric Type 90% Polyester/10% NylonCare Instructions Machine WashOrigin ImportedSize 24.5" x 69"Color Blue Curacao'
-#material: PU, EVAItem 
-#care : Machine WashItem Thickness 6 Millimeters // BPA free: our products are free of Phthalate
-#rinted yoga mats release a very strong but harmless odor when fir… See more'
-#只能手洗',//⭐Get a free carry strap by claiming the promotion code., ⭐Th… See more',
-#dimentions: 23.62 x 9.84 x 0.59 inchesItem Thickness 1.5 Centimeters
-#for i in df.columns:
-print(df['color'].unique())
-# %%
-df.isna().sum()
-# %%
-s= 'a b,c:d*s'
-a=[',',':','*']
-# %%
-s.split(',' or ':')
-# %%
-def split_rest_features(x,all_features):
-    f = all_features
-    if type(x)==float or type(x)==int:
-        return np.nan
-    else:
-        x = x.split(f[1] or f[0] or f[2] )
-        print(x)
-        return x[0]
-print('result',split_rest_features(s,a))
-# %%
 
+# df = df.drop(df[df.combined_price==0].index)
+# df.shape
+#%%
+#save cleaned data
+df.to_csv('amazon_data_cleaned_01.csv')
 # %%
