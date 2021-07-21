@@ -155,6 +155,7 @@ df['table_features_color_care_material']
 df['table_features_color_care_material']
 df['table_features_color_care_material'] = df['table_features_color_care_material'].apply(lambda y:np.nan  if type(y)==list and len(y)==0 else y)
 # %%
+all_features = ['Weight', 'Item Dimensions LxWxH','Care Instructions','Item Thickness','Material','Brand']
 def split_feature(x, feature):
     if type(x)==float or type(x)==int:
         return np.nan
@@ -162,6 +163,19 @@ def split_feature(x, feature):
         return x.split(feature)[-1]
     else:
         return np.nan
+def split_rest_features(x,all_features):
+    f = all_features
+    if type(x)==float or type(x)==int:
+        return np.nan
+    else:
+        x = x.split(f[0])[0]
+        x = x.split(f[1])[0]
+        x = x.split(f[2])[0]
+        x = x.split(f[3])[0]
+        x = x.split(f[4])[0]
+        print(x)
+        return x
+        
 def after_split(x, feature):
     if type(x)==float or type(x)==int:
         return np.nan
@@ -171,28 +185,28 @@ def after_split(x, feature):
         return x
 #Color Cherry Pink & Navy BlueBrand BEAUTYOVOMaterial Thermoplastic ElastomersProduct Care Instructions 
 #Hand Wash OnlyItem Dimensions LxWxH 72 x 24 x 0.31 inchesItem Weight 2 Pounds
-df['weight']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Weight'))
-df['table_features_color_care_material']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Weight'))
+df['weight']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Weight')).apply(lambda x: split_rest_features(x, all_features))
+#df['table_features_color_care_material']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Weight'))
 
-df['dimentions']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Item Dimensions LxWxH'))
-df['table_features_color_care_material']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Item Dimensions LxWxH'))
+df['dimentions']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Item Dimensions LxWxH')).apply(lambda x: split_rest_features(x, all_features))
+# df['table_features_color_care_material']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Item Dimensions LxWxH'))
 
-df['care']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Product Care Instructions'))
-df['table_features_color_care_material']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Product Care Instructions'))
+df['care']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Product Care Instructions')).apply(lambda x: split_rest_features(x, all_features))
+#df['table_features_color_care_material']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Product Care Instructions'))
 
-df['thickness']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Item Thickness'))
-df['table_features_color_care_material']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Item Thickness'))
+df['thickness']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Item Thickness')).apply(lambda x: split_rest_features(x, all_features))
+#df['table_features_color_care_material']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Item Thickness'))
 
-df['material']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Material'))
-df['table_features_color_care_material']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Material'))
+df['material']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Material')).apply(lambda x: split_rest_features(x, all_features))
+#df['table_features_color_care_material']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Material'))
 
-df['brand']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Brand'))
-df['color']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Brand'))
+df['brand']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Brand')).apply(lambda x: split_rest_features(x, all_features))
+df['color']=df['table_features_color_care_material'].apply(lambda x: split_rest_features(x, all_features))
 
 
 
 #%%
-
+df.isna().sum()
 # %%
 #color: Fabric Type 90% Polyester/10% NylonCare Instructions Machine WashOrigin ImportedSize 24.5" x 69"Color Blue Curacao'
 #material: PU, EVAItem 
@@ -200,15 +214,25 @@ df['color']=df['table_features_color_care_material'].apply(lambda x: after_split
 #rinted yoga mats release a very strong but harmless odor when fir… See more'
 #只能手洗',//⭐Get a free carry strap by claiming the promotion code., ⭐Th… See more',
 #dimentions: 23.62 x 9.84 x 0.59 inchesItem Thickness 1.5 Centimeters
-df['weight'].unique()
+#for i in df.columns:
+print(df['color'].unique())
 # %%
 df.isna().sum()
 # %%
-
+s= 'a b,c:d*s'
+a=[',',':','*']
 # %%
-
+s.split(',' or ':')
 # %%
-
+def split_rest_features(x,all_features):
+    f = all_features
+    if type(x)==float or type(x)==int:
+        return np.nan
+    else:
+        x = x.split(f[1] or f[0] or f[2] )
+        print(x)
+        return x[0]
+print('result',split_rest_features(s,a))
 # %%
 
 # %%
