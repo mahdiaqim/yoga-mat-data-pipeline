@@ -17,7 +17,7 @@ df2 = pd.read_csv('C:\\Users\\kautar\\Documents\\Aicore\\Projects\\Webscraping\\
 #concatenate  the two dataframes
 df = pd.concat([df1,df2])
 df.columns = columns
-df.head(100)
+df.head(1)
 # %%
 df[['mat_url']]
 df.columns
@@ -149,32 +149,63 @@ df.drop(columns_to_drop,axis=1, inplace=True)
 df.shape
 #%%
 #other prices and table features
-df['table_features_color_care_material']
-# %%
-
-# %%
-
-# %%
-
-# %%
-
-# %%
-
-#%%
-#other prices and table features
 df['table_features_color_care_material'].isna().sum()
 df['table_features_color_care_material'] = df['table_features_color_care_material'].apply(lambda y:np.nan  if type(y)==list and len(y)==0 else y)
 # %%
-regex_price = re.compile(r'Material(.*?)Lx')
-df['material']=df['table_features_color_care_material'].str.findall(regex_price)
-#df['saleprice'] = df['saleprice'].str.replace('$',"").astype('float')
-# %%
+def split_feature(x, feature):
+    if type(x)==float:
+        return np.nan
+    elif feature in x :
+        return x.split(feature)[-1]
+    else:
+        return np.nan
+def after_split(x, feature):
+    if type(x)==float:
+        return np.nan
+    elif feature in x :
+        return x.split(feature)[0]
+    else:
+        return x
+#Color Cherry Pink & Navy BlueBrand BEAUTYOVOMaterial Thermoplastic ElastomersProduct Care Instructions 
+#Hand Wash OnlyItem Dimensions LxWxH 72 x 24 x 0.31 inchesItem Weight 2 Pounds
+df['weight']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Weight'))
+df['table_features_color_care_material']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Weight'))
 
-df['material'].isnull().sum()
+df['dimentions']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Item Dimensions LxWxH'))
+df['table_features_color_care_material']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Item Dimensions LxWxH'))
+
+df['care']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Product Care Instructions'))
+df['table_features_color_care_material']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Product Care Instructions'))
+
+df['thickness']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Item Thickness'))
+df['table_features_color_care_material']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Item Thickness'))
+
+df['material']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Material'))
+df['table_features_color_care_material']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Material'))
+
+df['brand']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Brand'))
+df['color']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Brand'))
+
+
+
+#%%
+
 # %%
+#color: Fabric Type 90% Polyester/10% NylonCare Instructions Machine WashOrigin ImportedSize 24.5" x 69"Color Blue Curacao'
+#material: PU, EVAItem 
+#care : Machine WashItem Thickness 6 Millimeters // BPA free: our products are free of Phthalate
+#rinted yoga mats release a very strong but harmless odor when fir… See more'
+#只能手洗',//⭐Get a free carry strap by claiming the promotion code., ⭐Th… See more',
+#dimentions: 23.62 x 9.84 x 0.59 inchesItem Thickness 1.5 Centimeters
+df['weight'].unique()
+# %%
+df.isna().sum()
 # %%
 pd.set_option('display.max_colwidth', None)
-pd.options.display.max_colwidth
+df['material']
+df.loc[501, 'material']
 
-
+# %%
+st = 'as c a m'
+st.split('c')
 # %%
