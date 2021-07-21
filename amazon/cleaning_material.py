@@ -202,8 +202,12 @@ df['weight'].unique()
 df.isna().sum()
 # %%
 pd.set_option('display.max_colwidth', None)
+<<<<<<< HEAD
 df['material']
 df.loc[501, 'material']
+=======
+
+>>>>>>> ec56a2b15fc290bdb99a4d43aa016b34ac97179b
 
 # %%
 st = 'as c a m'
