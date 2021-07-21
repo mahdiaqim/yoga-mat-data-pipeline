@@ -174,7 +174,6 @@ df['material'].isnull().sum()
 # %%
 # %%
 pd.set_option('display.max_colwidth', None)
-pd.options.display.max_colwidthgit
 
 
 # %%
