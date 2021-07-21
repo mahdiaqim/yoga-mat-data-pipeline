@@ -45,16 +45,16 @@ df.drop(['other_colors_and_prices'],axis=1, inplace=True)
 # %%
 for i in columns:
     try:
-        df[i] = df[i].apply(lambda y:np.nan  if len(y)==0 else y)
+        df[i] = df[i].apply(lambda y:np.nan  if y=='[]' else y)
         df[i] = df[i].apply(lambda y:np.nan  if y=="['error']" else y)
     except Exception as e:
         print(e)
 df = df.replace(r'', np.NaN)
-
 #%%
 df['other_prices']
 #%%
-df.isnull().sum()#%%
+df.isnull().sum()
+#%%
 df.isna().sum()
 df.info()
 
@@ -123,6 +123,8 @@ plt.plot(df['ourprice_1'], label=f"ourprice_1-nulls={df['ourprice_1'].isna().sum
 plt.plot(df['price_buybox'], label=f"price_buybox-nulls={df['price_buybox'].isna().sum()}")
 plt.plot(df['other_prices_to fill_ourprice'], label=f"other_prices_to fill_ourprice-nulls={df['other_prices_to fill_ourprice'].isna().sum()}")
 plt.legend()
+#%%
+#drop where price is 0
 
 # %%
 prices =df.fillna(0)['other_prices_to fill_ourprice'] + df.fillna(0)['saleprice'] + df.fillna(0)['ourprice_2'] + df.fillna(0)['ourprice_1'] + df.fillna(0)['price_buybox']
@@ -131,16 +133,13 @@ bool.sum()
 #184 missing values for the price, 161 missing if I use the price from other colors
 #%%
 #Combined price is completed with the ones with less missing values
-
-df['combined_price'] =df['price_buybox'].fillna(0)
-print((df['combined_price']==0).sum())
+df = df.fillna(0)
+df['combined_price'] =df['price_buybox']
+print(df['combined_price'].isna().sum())
 df['combined_price']=np.where(df['combined_price']==0 ,df['other_prices_to fill_ourprice'],df['combined_price'])
 print((df['combined_price']==0).sum())
-df['combined_price']=np.where(df['combined_price']==0 ,df['saleprice'],df['combined_price'])
-print((df['combined_price']==0).sum())
 #%%
-#drop where price is 0
-df = df.drop(df[df.combined_price.isnull()].index)
+df = df.drop(df[df.combined_price==0].index)
 df.shape
 #%%
 #drop columns with other prices
@@ -150,6 +149,60 @@ df.shape
 #%%
 #other prices and table features
 df['table_features_color_care_material']
+
+#%%
+#other prices and table features
+df['table_features_color_care_material']
+df['table_features_color_care_material'] = df['table_features_color_care_material'].apply(lambda y:np.nan  if type(y)==list and len(y)==0 else y)
+# %%
+def split_feature(x, feature):
+    if type(x)==float or type(x)==int:
+        return np.nan
+    elif feature in x :
+        return x.split(feature)[-1]
+    else:
+        return np.nan
+def after_split(x, feature):
+    if type(x)==float or type(x)==int:
+        return np.nan
+    elif feature in x :
+        return x.split(feature)[0]
+    else:
+        return x
+#Color Cherry Pink & Navy BlueBrand BEAUTYOVOMaterial Thermoplastic ElastomersProduct Care Instructions 
+#Hand Wash OnlyItem Dimensions LxWxH 72 x 24 x 0.31 inchesItem Weight 2 Pounds
+df['weight']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Weight'))
+df['table_features_color_care_material']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Weight'))
+
+df['dimentions']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Item Dimensions LxWxH'))
+df['table_features_color_care_material']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Item Dimensions LxWxH'))
+
+df['care']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Product Care Instructions'))
+df['table_features_color_care_material']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Product Care Instructions'))
+
+df['thickness']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Item Thickness'))
+df['table_features_color_care_material']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Item Thickness'))
+
+df['material']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Material'))
+df['table_features_color_care_material']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Material'))
+
+df['brand']=df['table_features_color_care_material'].apply(lambda x: split_feature(x, 'Brand'))
+df['color']=df['table_features_color_care_material'].apply(lambda x: after_split(x, 'Brand'))
+
+
+
+#%%
+
+# %%
+#color: Fabric Type 90% Polyester/10% NylonCare Instructions Machine WashOrigin ImportedSize 24.5" x 69"Color Blue Curacao'
+#material: PU, EVAItem 
+#care : Machine WashItem Thickness 6 Millimeters // BPA free: our products are free of Phthalate
+#rinted yoga mats release a very strong but harmless odor when fir… See more'
+#只能手洗',//⭐Get a free carry strap by claiming the promotion code., ⭐Th… See more',
+#dimentions: 23.62 x 9.84 x 0.59 inchesItem Thickness 1.5 Centimeters
+df['weight'].unique()
+# %%
+df.isna().sum()
 # %%
 
 # %%
