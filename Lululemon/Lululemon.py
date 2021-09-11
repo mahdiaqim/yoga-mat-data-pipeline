@@ -24,8 +24,16 @@ from botocore.exceptions import ClientError
 import logging
 import boto3
 
-options = webdriver.ChromeOptions()
-options.headless = True
+import os
+from webdriver_manager import chrome # ChromeDriverManager`
+def chrome_driver():
+        options = Options()
+        options.add_argument("--log-level=3")  # disable Info/Error/Warning in Chrome Driver
+        os.environ['WDM_LOG_LEVEL'] = '0'  # Disable the logging of ChromeDriverManager()
+        WebDriver = webdriver.Chrome(chrome.ChromeDriverManager().install(), options=options)
+        return WebDriver
+# options = webdriver.ChromeOptions()
+# options.headless = True
 #options.add_argument
 # options.add_argument("--window-size=1920,1080")
 # options.add_argument('--ignore-certificate-errors')
@@ -73,13 +81,13 @@ class Bot():
             options.add_argument('--allow-running-insecure-content')
             options.add_argument("--disable-extensions")
             options.add_argument("--proxy-server='direct://'")
-            options.add_argument("--proxy-bypass-list=*")
+            #options.add_argument("--proxy-bypass-list=*")
             options.add_argument("--start-maximized")
             options.add_argument('--disable-gpu')
             options.add_argument('--disable-dev-shm-usage')
             options.add_argument('--no-sandbox')
         options.add_argument("--no-sandbox")   # without this, the chrome webdriver can't start (SECURITY RISK)
-        self.driver = webdriver.Chrome(options=options)			# create webdriver
+        self.driver = chrome_driver()			# create webdriver #options=options
     
     def upload(self,file_name, bucket, object_name=None):
         """
@@ -255,7 +263,7 @@ if __name__ == '__main__':
    # Script to run all functions
     start_time =  time()
     # initializing class bot
-    bot = Bot(headless=True)
+    bot = Bot(headless=False)
     #first get all urls for the products
     links = bot.get_all_links_to_each_mat()
     print('urls for each product were obtained')
